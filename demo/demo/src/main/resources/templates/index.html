@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User administration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header class="topbar fade-up">
+    <div class="site-shell topbar-inner">
+        <a class="brand" th:href="@{/}">User Manager</a>
+        <a class="btn btn-primary" th:href="@{/signup}">Add user</a>
+    </div>
+</header>
+
+<main class="site-shell">
+    <section class="hero fade-up">
+        <h1>User administration</h1>
+        <p>Manage your contacts with quick create, edit, and delete operations.</p>
+    </section>
+
+    <section class="panel fade-up" th:switch="${users}">
+        <div class="empty-state" th:case="null">
+            <h2>No users yet</h2>
+            <p>Start by creating the first user in your list.</p>
+            <a class="btn btn-success" th:href="@{/signup}">Create user</a>
+        </div>
+
+        <div th:case="*">
+            <div class="panel-head">
+                <h2>Users list</h2>
+                <a class="btn btn-primary" th:href="@{/signup}">New user</a>
+            </div>
+
+            <div class="table-wrap">
+                <table class="users-table">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="user, stat : ${users}" th:style="'animation-delay:' + (${stat.index} * 60) + 'ms'">
+                        <td th:text="${user.name}"></td>
+                        <td th:text="${user.email}"></td>
+                        <td class="actions">
+                            <a class="btn btn-warning btn-sm" th:href="@{/edit/{id}(id=${user.id})}">Edit</a>
+                            <a
+                                class="btn btn-danger btn-sm"
+                                th:href="@{/delete/{id}(id=${user.id})}"
+                                onclick="return confirm('Confirm delete?');">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
